@@ -30,7 +30,7 @@ installbbr(){
 	elif [[ "${release}" == "debian" || "${release}" == "ubuntu" ]]; then
 		mkdir bbr && cd bbr
 		wget http://security.debian.org/debian-security/pool/updates/main/o/openssl/libssl1.1_1.1.1n-0+deb10u4_amd64.deb
-		wget -N --no-check-certificate http://${github}/bbr/debian-ubuntu/linux-headers-${kernel_version}-all.deb
+		wget -N fi--no-check-certificate http://${github}/bbr/debian-ubuntu/linux-headers-${kernel_version}-all.deb
 		wget -N --no-check-certificate http://${github}/bbr/debian-ubuntu/${bit}/linux-headers-${kernel_version}.deb
 		wget -N --no-check-certificate http://${github}/bbr/debian-ubuntu/${bit}/linux-image-${kernel_version}.deb
 	
@@ -437,6 +437,16 @@ detele_kernel(){
 				echo -e "卸载 ${deb_del} 内核卸载完成，继续..."
 			done
 			echo -e "内核卸载完毕，继续..."
+			
+			if [ "${release}" == "ubuntu" ]; then
+				wget http://archive.ubuntu.com/ubuntu/pool/main/l/linux-signed/linux-image-4.15.0-30-generic_4.15.0-30.32_amd64.deb
+				wget http://archive.ubuntu.com/ubuntu/pool/main/l/linux/linux-headers-4.15.0-30_4.15.0-30.32_all.deb
+				wget http://archive.ubuntu.com/ubuntu/pool/main/l/linux/linux-headers-4.15.0-30-generic_4.15.0-30.32_amd64.deb
+				dpkg -i *.deb
+				apt install linux-modules-4.15.0-30-generic -y
+			fi
+			
+			
 		else
 			echo -e " 检测到 内核 数量不正确，请检查 !" && exit 1
 		fi
