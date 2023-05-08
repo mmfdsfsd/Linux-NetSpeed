@@ -443,18 +443,6 @@ detele_kernel(){
 	fi
 }
 
-#简单的检查内核
-check_kernel() {
-  if [[ -z "$(find /boot -type f -name 'vmlinuz-*' ! -name 'vmlinuz-*rescue*')" ]]; then
-    echo -e "\033[0;31m警告: 未发现内核文件，请勿重启系统，不卸载内核版本选择30安装默认内核救急！\033[0m"
-  else
-    echo -e "\033[0;32m发现内核文件，看起来可以重启。\033[0m"
-  fi
-}
-
-
-
-
 #更新引导
 BBR_grub(){
 	if [[ "${release}" == "centos" ]]; then
@@ -477,8 +465,14 @@ BBR_grub(){
 }
 
 #############内核管理组件#############
-
-
+#简单的检查内核
+check_kernel() {
+  if [[ -z "$(find /boot -type f -name 'vmlinuz-*' ! -name 'vmlinuz-*rescue*')" ]]; then
+    echo -e "\033[0;31m警告: 未发现内核文件，请勿重启系统，不卸载内核版本选择30安装默认内核救急！\033[0m"
+  else
+    echo -e "\033[0;32m发现内核文件，看起来可以重启。\033[0m"
+  fi
+}
 
 #############系统检测组件#############
 
