@@ -204,10 +204,10 @@ startbbrmod_nanqinlang(){
 startlotserver(){
 	remove_all
 	if [[ "${release}" == "centos" ]]; then
-		yum install ethtool
+		yum install ethtool -y
 	else
 		apt-get update
-		apt-get install ethtool
+		apt-get install ethtool -y
 	fi
 	bash <(wget --no-check-certificate -qO- https://raw.githubusercontent.com/mengyalei/lotServer/master/Install.sh) install
 	sed -i '/advinacc/d' /appex/etc/config
