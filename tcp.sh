@@ -589,7 +589,7 @@ check_sys_Lotsever(){
 			echo -e "${Error} Lotsever不支持当前系统 ${release} ${version} ${bit} !" && exit 1
 		fi
 	elif [[ "${release}" == "ubuntu" ]]; then
-		if [[ ${version} -ge "12" ]]; then
+		if [[ ${version} -ge "14" ]]; then
 			if [[ ${bit} == "x64" ]]; then
 				kernel_version="4.4.0-47"
 				installlot
