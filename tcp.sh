@@ -599,6 +599,28 @@ check_sys_Lotsever(){
 		else
 			echo -e "${Error} Lotsever不支持当前系统 ${release} ${version} ${bit} !" && exit 1
 		fi
+		if [[ ${version} -ge "16" ]]; then
+			if [[ ${bit} == "x64" ]]; then
+				kernel_version="4.4.0-47"
+				installlot
+			elif [[ ${bit} == "x32" ]]; then
+				kernel_version="3.13.0-29"
+				installlot
+			fi
+		else
+			echo -e "${Error} Lotsever不支持当前系统 ${release} ${version} ${bit} !" && exit 1
+		fi
+		if [[ ${version} -ge "18" ]]; then
+			if [[ ${bit} == "x64" ]]; then
+				kernel_version="4.15.0-30"
+				installlot
+			elif [[ ${bit} == "x32" ]]; then
+				kernel_version="3.13.0-29"
+				installlot
+			fi
+		else
+			echo -e "${Error} Lotsever不支持当前系统 ${release} ${version} ${bit} !" && exit 1
+		fi
 	else
 		echo -e "${Error} Lotsever不支持当前系统 ${release} ${version} ${bit} !" && exit 1
 	fi
