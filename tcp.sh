@@ -213,7 +213,7 @@ startlotserver(){
 	sed -i '/advinacc/d' /appex/etc/config
 	sed -i '/maxmode/d' /appex/etc/config
 	echo -e "advinacc=\"1\"
-maxmode=\"1\"">>/appex/etc/config
+	maxmode=\"1\"">>/appex/etc/config
 	/appex/bin/lotServer.sh restart
 	start_menu
 }
