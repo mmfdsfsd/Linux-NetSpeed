@@ -434,7 +434,6 @@ detele_kernel(){
 				deb_del=`dpkg -l|grep linux-image | awk '{print $2}' | grep -v "${kernel_version}" | head -${integer}`
 				echo -e "开始卸载 ${deb_del} 内核..."
 				apt-get purge -y ${deb_del}
-        			apt-get autoremove -y
 				echo -e "卸载 ${deb_del} 内核卸载完成，继续..."
 			done
 			echo -e "内核卸载完毕，继续..."
