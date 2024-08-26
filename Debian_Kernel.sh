@@ -25,7 +25,7 @@ elif [ "$deb_relese" == 'debian' ]; then
   elif [ "$deb_ver" == "8" ]; then
     item="3.16.0-4-${os_ver}" && ver='jessie' && url='archive.debian.org' && urls='deb.debian.org'
   elif [ "$deb_ver" == "9" ]; then
-    item="4.9.0-4-${os_ver}" && ver='stretch' && url='deb.debian.org' && urls='deb.debian.org'
+    item="4.9.0-4-${os_ver}" && ver='stretch' && url='/archive.debian.org' && urls='/archive.debian.org'
   else
     exit 1
   fi
@@ -41,10 +41,10 @@ if [ "$deb_relese" == 'ubuntu' ]; then
   echo "deb http://${url}/${deb_relese} ${ver}-backports main restricted universe multiverse" >>/etc/apt/sources.list
   echo "deb http://${urls}/${deb_relese} ${ver}-security main restricted universe multiverse" >>/etc/apt/sources.list
 elif [ "$deb_relese" == 'debian' ]; then
-  echo "deb http://archive.debian.org/debian stretch main" >/etc/apt/sources.list
-  echo "deb-src http://archive.debian.org/debian stretch main" >>/etc/apt/sources.list
-  echo "deb http://archive.debian.org/debian-security stretch/updates main" >>/etc/apt/sources.list
-  echo "deb-src http://archive.debian.org/debian-security stretch/updates main" >>/etc/apt/sources.list
+  echo "deb http://${url}/${deb_relese} ${ver} main" >/etc/apt/sources.list
+  echo "deb-src http://${url}/${deb_relese} ${ver} main" >>/etc/apt/sources.list
+  echo "deb http://${urls}/${deb_relese}-security ${ver}/updates main" >>/etc/apt/sources.list
+  echo "deb-src http://${urls}/${deb_relese}-security ${ver}/updates main" >>/etc/apt/sources.list
 fi
 
 apt-get update
