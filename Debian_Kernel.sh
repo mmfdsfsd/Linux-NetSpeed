@@ -41,10 +41,10 @@ if [ "$deb_relese" == 'ubuntu' ]; then
   echo "deb http://${url}/${deb_relese} ${ver}-backports main restricted universe multiverse" >>/etc/apt/sources.list
   echo "deb http://${urls}/${deb_relese} ${ver}-security main restricted universe multiverse" >>/etc/apt/sources.list
 elif [ "$deb_relese" == 'debian' ]; then
-  echo "deb http://${url}/${deb_relese} ${ver} main" >/etc/apt/sources.list
-  echo "deb-src http://${url}/${deb_relese} ${ver} main" >>/etc/apt/sources.list
-  echo "deb http://${urls}/${deb_relese}-security ${ver}/updates main" >>/etc/apt/sources.list
-  echo "deb-src http://${urls}/${deb_relese}-security ${ver}/updates main" >>/etc/apt/sources.list
+  echo "deb http://archive.debian.org/debian stretch main" >/etc/apt/sources.list
+  echo "deb-src http://archive.debian.org/debian stretch main" >>/etc/apt/sources.list
+  echo "deb http://archive.debian.org/debian-security stretch/updates main" >>/etc/apt/sources.list
+  echo "deb-src http://archive.debian.org/debian-security stretch/updates main" >>/etc/apt/sources.list
 fi
 
 apt-get update
