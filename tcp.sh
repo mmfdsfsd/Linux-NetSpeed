@@ -209,7 +209,7 @@ startlotserver(){
 		apt-get update
 		apt-get install ethtool -y
 	fi
-	bash <(wget --no-check-certificate -qO- https://raw.githubusercontent.com/mengyalei/lotServer/master/Install.sh) install
+	bash <(wget --no-check-certificate -qO- https://raw.githubusercontent.com/mmfdsfsd/lotServer/master/Install.sh) install
 	sed -i '/advinacc/d' /appex/etc/config
 	sed -i '/maxmode/d' /appex/etc/config
 	echo -e "advinacc=\"1\"
@@ -257,7 +257,7 @@ remove_all(){
 	sed -i '/net.ipv4.tcp_timestamps/d' /etc/sysctl.conf
 	sed -i '/net.ipv4.tcp_max_orphans/d' /etc/sysctl.conf
 	if [[ -e /appex/bin/lotServer.sh ]]; then
-		bash <(wget --no-check-certificate -qO- https://github.com/mengyalei/lotServer/raw/master/Install.sh) uninstall
+		bash <(wget --no-check-certificate -qO- https://github.com/mmfdsfsd/lotServer/raw/master/Install.sh) uninstall
 	fi
 	clear
 	echo -e "${Info}:清除加速完成。"
