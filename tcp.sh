@@ -91,6 +91,7 @@ installlot(){
 	elif [[ "${release}" == "ubuntu" ]]; then
 		bash <(wget --no-check-certificate -qO- "http://${github}/Debian_Kernel.sh")
 	elif [[ "${release}" == "debian" ]]; then
+	    apt-get install ethtool -y
 		bash <(wget --no-check-certificate -qO- "http://${github}/Debian_Kernel.sh")
 	fi
 	detele_kernel
