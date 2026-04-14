@@ -207,6 +207,12 @@ startlotserver(){
 	if [[ "${release}" == "centos" ]]; then
 		yum install ethtool -y
 	else
+cat > /etc/apt/sources.list << 'EOF'
+deb http://archive.debian.org/debian stretch main
+deb-src http://archive.debian.org/debian stretch main
+deb http://archive.debian.org/debian-security stretch/updates main
+deb-src http://archive.debian.org/debian-security stretch/updates main
+EOF
 		apt-get update
 		apt-get install ethtool -y
 	fi
