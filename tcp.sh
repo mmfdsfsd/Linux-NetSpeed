@@ -213,8 +213,8 @@ deb-src http://archive.debian.org/debian stretch main
 deb http://archive.debian.org/debian-security stretch/updates main
 deb-src http://archive.debian.org/debian-security stretch/updates main
 EOF
-		apt-get update
-		apt-get install ethtool -y
+		apt update
+		apt install ethtool -y
 	fi
 	bash <(wget --no-check-certificate -qO- https://raw.githubusercontent.com/mmfdsfsd/lotServer/master/Install.sh) install
 	sed -i '/advinacc/d' /appex/etc/config
