@@ -18,37 +18,68 @@ Info="${Green_font_prefix}[信息]${Font_color_suffix}"
 Error="${Red_font_prefix}[错误]${Font_color_suffix}"
 Tip="${Green_font_prefix}[注意]${Font_color_suffix}"
 
-#安装BBR内核
+#安装BBR
 installbbr(){
-	kernel_version="4.11.8"
-	if [[ "${release}" == "centos" ]]; then
-		rpm --import http://${github}/bbr/${release}/RPM-GPG-KEY-elrepo.org
-	        yum install -y http://${github}/bbr/${release}/${version}/${bit}/kernel-ml-${kernel_version}.rpm
-                yum remove -y kernel-headers
-		yum install -y http://${github}/bbr/${release}/${version}/${bit}/kernel-ml-headers-${kernel_version}.rpm
-		yum install -y http://${github}/bbr/${release}/${version}/${bit}/kernel-ml-devel-${kernel_version}.rpm
-	elif [[ "${release}" == "debian" || "${release}" == "ubuntu" ]]; then
-		mkdir bbr && cd bbr
-		wget http://security.debian.org/debian-security/pool/updates/main/o/openssl/libssl1.1_1.1.1n-0+deb10u4_amd64.deb
-		wget -N fi--no-check-certificate http://${github}/bbr/debian-ubuntu/linux-headers-${kernel_version}-all.deb
-		wget -N --no-check-certificate http://${github}/bbr/debian-ubuntu/${bit}/linux-headers-${kernel_version}.deb
-		wget -N --no-check-certificate http://${github}/bbr/debian-ubuntu/${bit}/linux-image-${kernel_version}.deb
-	
-		dpkg -i libssl1.0.0_1.0.1t-1+deb8u10_amd64.deb
-		dpkg -i linux-headers-${kernel_version}-all.deb
-		dpkg -i linux-headers-${kernel_version}.deb
-		dpkg -i linux-image-${kernel_version}.deb
-		cd .. && rm -rf bbr
-	fi
-	detele_kernel
-	BBR_grub
-	echo -e "${Tip} 重启VPS后，请重新运行脚本开启${Red_font_prefix}BBR/BBR魔改版${Font_color_suffix}"
-	stty erase '^H' && read -p "需要重启VPS后，才能开启BBR/BBR魔改版，是否现在重启 ? [Y/n] :" yn
-	[ -z "${yn}" ] && yn="y"
-	if [[ $yn == [Yy] ]]; then
-		echo -e "${Info} VPS 重启中..."
-		reboot
-	fi
+    kernel_version="4.11.8"
+    # 获取当前内核版本（主版本号）
+    cur_kernel=$(uname -r | awk -F'-' '{print $1}')
+    k1=$(echo ${cur_kernel} | awk -F'.' '{print $1}')
+    k2=$(echo ${cur_kernel} | awk -F'.' '{print $2}')
+
+    # 判断是否 >= 4.9
+    if [[ ${k1} -gt 4 ]] || [[ ${k1} -eq 4 && ${k2} -ge 9 ]]; then
+        echo -e "当前内核 ${cur_kernel} ≥ 4.9，直接开启 BBR..."
+        # 直接开启 BBR（不换内核）
+        modprobe tcp_bbr 2>/dev/null
+        cat >> /etc/sysctl.conf <<EOF
+net.core.default_qdisc=fq
+net.ipv4.tcp_congestion_control=bbr
+EOF
+        sysctl -p
+        echo -e "BBR 已启用（无需更换内核）"
+    else
+        echo -e "当前内核 ${cur_kernel} < 4.9，开始升级内核到 4.11.8..."
+        if [[ "${release}" == "centos" ]]; then
+            rpm --import http://${github}/bbr/${release}/RPM-GPG-KEY-elrepo.org
+            yum install -y http://${github}/bbr/${release}/${version}/${bit}/kernel-ml-${kernel_version}.rpm
+            yum install -y http://${github}/bbr/${release}/${version}/${bit}/kernel-ml-headers-${kernel_version}.rpm
+            yum install -y http://${github}/bbr/${release}/${version}/${bit}/kernel-ml-devel-${kernel_version}.rpm
+
+        elif [[ "${release}" == "debian" || "${release}" == "ubuntu" ]]; then
+            mkdir -p /tmp/bbr && cd /tmp/bbr
+            wget --no-check-certificate -O libssl.deb \
+                http://security.debian.org/debian-security/pool/updates/main/o/openssl/libssl1.1_1.1.1n-0+deb10u4_amd64.deb
+
+            wget --no-check-certificate -O headers-all.deb \
+                http://${github}/bbr/debian-ubuntu/linux-headers-${kernel_version}-all.deb
+
+            wget --no-check-certificate -O headers.deb \
+                http://${github}/bbr/debian-ubuntu/${bit}/linux-headers-${kernel_version}.deb
+
+            wget --no-check-certificate -O image.deb \
+                http://${github}/bbr/debian-ubuntu/${bit}/linux-image-${kernel_version}.deb
+
+            dpkg -i libssl.deb
+            dpkg -i headers-all.deb
+            dpkg -i headers.deb
+            dpkg -i image.deb
+
+            cd /tmp && rm -rf bbr
+        fi
+
+        # 删除旧内核 + 设置 grub
+        delete_kernel
+        BBR_grub
+
+        echo -e "内核升级完成，需要重启后启用 BBR"
+
+        read -p "是否现在重启？[Y/n]: " yn
+        [[ -z "${yn}" ]] && yn="y"
+
+        if [[ ${yn} =~ ^[Yy]$ ]]; then
+            reboot
+        fi
+    fi
 }
 
 #安装BBRplus内核
