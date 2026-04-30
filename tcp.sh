@@ -449,7 +449,7 @@ esac
 #############内核管理组件#############
 
 #删除多余内核
-detele_kernel(){
+delete_kernel(){
 	if [[ "${release}" == "centos" ]]; then
 		rpm_total=`rpm -qa | grep kernel | grep -v "${kernel_version}" | grep -v "noarch" | wc -l`
 		if [ "${rpm_total}" > "1" ]; then
